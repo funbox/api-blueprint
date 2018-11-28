@@ -32,7 +32,6 @@ Version: 1A9-FB-1.0.0
 + [API name & overview section](#def-api-name-section)
 + [Resource group section](#def-resourcegroup-section)
 + [Resource section](#def-resource-section)
-+ [Resource model section](#def-model-section)
 + [Schema section](#def-schema-section)
 + [Action section](#def-action-section)
 + [Request section](#def-request-section)
@@ -92,11 +91,6 @@ All of the blueprint sections are optional. However, when present, a section
 + [`0+` **Resource** sections](#def-resource-section)
     + [`0-1` **URI Parameters** section](#def-uriparameters-section)
     + [`0-1` **Attributes** section](#def-attributes-section)
-    + [`0-1` **Model** section](#def-model-section)
-        + [`0-1` **Headers** section](#def-headers-section)
-        + [`0-1` **Attributes** section](#def-attributes-section)
-        + [`0-1` **Body** section](#def-body-section)
-        + [`0-1` **Schema** section](#def-schema-section)
     + [`1+` **Action** sections](#def-action-section)
         + [`0-1` **Relation** section](#def-relation-section)
         + [`0-1` **URI Parameters** section](#def-uriparameters-section)
@@ -236,7 +230,6 @@ Following reserved keywords are used in section definitions:
 - `Response`
 - `Body`
 - `Schema`
-- `Model`
 - `Header` & `Headers`
 - `Parameter` & `Parameters`
 - `Values`
@@ -460,39 +453,6 @@ follows:
     2. Attributes section
     3. Schema section
 
-#### Referencing
-Instead of providing a payload section content, a
-[model payload section](#def-model-section) can be referenced using the
-Markdown implicit [reference syntax][]:
-
-    [<identifier>][]
-
-#### Example
-
-    + <keyword> Payload Name (application/json)
-
-        This the `Payload Name` description.
-
-        + Headers
-
-         ...
-
-        + Body
-
-         ...
-
-        + Schema
-
-        ...
-
-#### Example: Referencing model payload
-
-    + <keyword> Payload Name
-
-        [Resource model identifier][]
-
----
-
 
 # Section Basics
 
@@ -580,7 +540,7 @@ Resources in this groups are related to **ACME Blog** authors.
 <a name="def-resource-section"></a>
 ## Resource section
 - **Parent sections:** none, [Resource group section](#def-resourcegroup-section)
-- **Nested sections:** [`0-1` Parameters section](#def-uriparameters-section), [`0-1` Attributes section](#def-attributes-section), [`0-1` Model section](#def-model-section), [`1+` Action section](#def-action-section)
+- **Nested sections:** [`0-1` Parameters section](#def-uriparameters-section), [`0-1` Attributes section](#def-attributes-section), [`1+` Action section](#def-action-section)
 - **Markdown entity:** header
 - **Inherits from**: [Named section](#def-named-section)
 
@@ -635,8 +595,6 @@ sections:
     attributes. If the resource is defined with a name these attributes **may**
     be referenced in [Attributes sections][].
 
-- [`0-1` Model section](#def-model-section)
-
 - Additional [Action sections](#def-action-section)
 
 > **NOTE:** A blueprint document may contain multiple sections for the same
@@ -657,48 +615,6 @@ Resource representing **ACME Blog** posts.
 
 ```apib
 # GET /posts/{id}
-```
-
----
-
-<a name="def-model-section"></a>
-## Resource model section
-- **Parent sections:** [Resource section](#def-resource-section)
-- **Nested sections:** [Refer to payload section](#def-payload-section)
-- **Markdown entity:** list
-- **Inherits from**: [Payload section](#def-payload-section)
-
-#### Definition
-Defined by the `Model` keyword followed by an optional media type:
-
-    + Model (<media type>)
-
-#### Description
-A [resource manifestation](http://www.w3.org/TR/di-gloss/#def-resource-manifestation) - one
-exemplary representation of the resource in the form of a
-[payload](#def-payload-section).
-
-#### Referencing
-The payload defined in this section **may** be referenced in any response or
-request section in the document using parent section's identifier. You can
-refer to this payload in any of the following [Request](#def-request-section)
-or [Response](#def-response-section) payload sections using the Markdown
-implicit [reference syntax][].
-
-#### Example
-
-```apib
-# My Resource [/resource]
-
-+ Model (text/plain)
-
-        Hello World
-
-## Retrieve My Resource [GET]
-
-+ Response 200
-
-    [My Resource][]
 ```
 
 ---
@@ -1126,7 +1042,7 @@ specified otherwise.
 ```
 
 #### Payload Attributes description
-Description of payload (request, response, model) message-body attributes.
+Description of payload (request, response) message-body attributes.
 
 Not every attribute has to be described. However, when an attribute is
 described, it **should** appear in the respective
