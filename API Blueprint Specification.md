@@ -43,7 +43,6 @@ Version: 1A9-FB-1.0.0
 
 ### Going Further
 + [Data Structures section](#def-data-structures)
-+ [Relation section](#def-relation-section)
 
 
 ## [III. Appendix](#def-appendix)
@@ -92,7 +91,6 @@ All of the blueprint sections are optional. However, when present, a section
     + [`0-1` **URI Parameters** section](#def-uriparameters-section)
     + [`0-1` **Attributes** section](#def-attributes-section)
     + [`1+` **Action** sections](#def-action-section)
-        + [`0-1` **Relation** section](#def-relation-section)
         + [`0-1` **URI Parameters** section](#def-uriparameters-section)
         + [`0-1` **Attributes** section](#def-attributes-section)
         + [`0+` **Request** sections](#def-request-section)
@@ -234,7 +232,6 @@ Following reserved keywords are used in section definitions:
 - `Parameter` & `Parameters`
 - `Values`
 - `Attribute` & `Attributes`
-- `Relation`
 
 > **NOTE: Avoid using these keywords in other Markdown headers or lists**
 
@@ -665,7 +662,6 @@ Following example uses [Body section](#def-body-section) to provide an example o
 ## Action section
 - **Parent sections:** [Resource section](#def-resource-section)
 - **Nested sections:**
-    [`0-1` Relation section](#def-relation-section),
     [`0-1` URI parameters section](#def-uriparameters-section),
     [`0-1` Attributes section](#def-attributes-section),
     [`0+` Request section](#def-request-section),
@@ -1202,49 +1198,6 @@ Refer to the [MSON][] specification for full details on how to define an MSON Na
 ```
 
 ---
-
-<a name="def-relation-section"></a>
-## Relation section
-- **Parent sections:** [Action section](#def-action-section)
-- **Nested Sections:** none
-- **Markdown entity:** list
-- **Inherits from**: none
-
-#### Definition
-Defined by the `Relation` keyword written in a Markdown list item followed by a
-colon (`:`) and a link relation identifier.
-
-    + Relation: <link relation identifier>
-
-#### Description
-This section specifies a [link relation type](https://tools.ietf.org/html/rfc5988#section-4)
-for the given action as specified by [RFC 5988](https://tools.ietf.org/html/rfc5988).
-
-> **NOTE:** The link relation identifiers should be unique per resource in the blueprint document.
-
-#### Example
-
-```apib
-# Task [/tasks/{id}]
-
-+ Parameters
-    + id
-
-## Retrieve Task [GET]
-
-+ Relation: task
-+ Response 200
-
-        { ... }
-
-## Delete Task [DELETE]
-
-+ Relation: delete
-+ Response 204
-```
-
----
-
 
 <br>
 
