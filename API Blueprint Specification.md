@@ -45,6 +45,7 @@ Version: 1A9-FB-1.0.0
 + [Data Structures section](#def-data-structures)
 + [Resource Prototypes section](#def-resource-prototypes)
 + [Resource Prototype section](#def-resource-prototype)
++ [Import section](#def-import)
 
 
 ## [III. Appendix](#def-appendix)
@@ -110,6 +111,7 @@ All of the blueprint sections are optional. However, when present, a section
 + [`0+` **Data Structures** section](#def-data-structures)
 + [`0+` **Resource Prototypes** section](#def-resource-prototypes)
 + [`0+` **Resource Prototype** section](#def-resource-prototype)
++ [`0+` **Import section** section](#def-import)
 
 > **NOTE:** The number prior to a section name denotes the allowed number of
 > the section occurrences.
@@ -236,6 +238,7 @@ Following reserved keywords are used in section definitions:
 - `Parameter` & `Parameters`
 - `Values`
 - `Attribute` & `Attributes`
+- `Import`
 
 > **NOTE: Avoid using these keywords in other Markdown headers or lists**
 
@@ -1403,8 +1406,32 @@ This section defines prototype consisted of arbitrary number of [Response sectio
 
 + Response 403
 ```
+
 ---
 
+
+<a name="def-import"></a>
+## Import section
+- **Parent sections:** none
+- **Nested sections:** none
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by the `Import` keyword followed by file name:
+
+```
+# Import <file>
+```
+
+#### Description
+Specifies an import of apib file into current document.
+
+#### Example
+
+```apib
+# Import foo.apib
+```
 
 <br>
 
