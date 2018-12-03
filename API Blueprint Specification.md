@@ -43,6 +43,8 @@ Version: 1A9-FB-1.0.0
 
 ### Going Further
 + [Data Structures section](#def-data-structures)
++ [Resource Prototypes section](#def-resource-prototypes)
++ [Resource Prototype section](#def-resource-prototype)
 
 
 ## [III. Appendix](#def-appendix)
@@ -106,6 +108,8 @@ All of the blueprint sections are optional. However, when present, a section
 + [`0+` **Resource Group** sections](#def-resourcegroup-section)
     + [`0+` **Resource** sections](#def-resource-section) (see above)
 + [`0+` **Data Structures** section](#def-data-structures)
++ [`0+` **Resource Prototypes** section](#def-resource-prototypes)
++ [`0+` **Resource Prototype** section](#def-resource-prototype)
 
 > **NOTE:** The number prior to a section name denotes the allowed number of
 > the section occurrences.
@@ -507,13 +511,15 @@ Name and description of the API
 - **Inherits from**: [Named section](#def-named-section)
 
 #### Definition
-Defined by the `Group` keyword followed by group [name (identifier)](#def-identifier):
+Defined by the `Group` keyword followed by group [name (identifier)](#def-identifier), optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    # Group <identifier>
+    # Group <identifier> (<prototype>)
 
 #### Description
 This section represents a group of resources (Resource Sections). **May**
 include one or more nested [Resource Sections](#def-resource-section).
+
+If [Resource Prototype](#def-resource-prototype) specified it is applied for all nested [Actions](#def-action-section).
 
 #### Example
 
@@ -532,6 +538,13 @@ Resources in this groups are related to **ACME Blog** authors.
  ...
 ```
 
+
+```apib
+# Group Blog Posts (BasePrototype)
+
+## Resource 1 [/resource1]
+ ...
+```
 ---
 
 <a name="def-resource-section"></a>
@@ -542,30 +555,30 @@ Resources in this groups are related to **ACME Blog** authors.
 - **Inherits from**: [Named section](#def-named-section)
 
 #### Definition
-Defined by an [URI template][uritemplate]:
+Defined by an [URI template][uritemplate], optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    # <URI template>
+    # <URI template> (<prototype>)
 
 **-- or --**
 
 Defined by a resource [name (identifier)](#def-identifier) followed by an
-[URI template][uritemplate] enclosed in square brackets `[]`.
+[URI template][uritemplate] enclosed in square brackets `[]`, optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    # <identifier> [<URI template>]
+    # <identifier> [<URI template>] (<prototype>)
 
 **-- or --**
 
-Defined by an [HTTP request method][httpmethods] followed by [URI template][uritemplate]:
+Defined by an [HTTP request method][httpmethods] followed by [URI template][uritemplate], optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    # <HTTP request method> <URI template>
+    # <HTTP request method> <URI template> (<prototype>)
 
 **-- or --**
 
 Defined by a resource [name (identifier)](#def-identifier) followed by an
 [HTTP request method][httpmethods] and an [URI template][uritemplate] enclosed
-in square brackets `[]`:
+in square brackets `[]`, optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    # <identifier> [<HTTP request method> <URI template>]
+    # <identifier> [<HTTP request method> <URI template>] (<prototype>)
 
 > **NOTE:** In the latter two cases the rest of this section represents the
 > [Action section](#def-action-section) including its description and nested
@@ -599,6 +612,8 @@ sections:
 > is considered good practice to group multiple HTTP methods under one resource
 > (resource set).
 
+If [Resource Prototype](#def-resource-prototype) specified it is applied for all nested [Actions](#def-action-section).
+
 #### Example
 
 ```apib
@@ -607,11 +622,24 @@ Resource representing **ACME Blog** posts.
 ```
 
 ```apib
+# Blog Posts [/posts/{id}] (BasePrototype)
+Resource representing **ACME Blog** posts.
+```
+
+```apib
 # /posts/{id}
 ```
 
 ```apib
+# /posts/{id} (BasePrototype)
+```
+
+```apib
 # GET /posts/{id}
+```
+
+```apib
+# GET /posts/{id} (BasePrototype)
 ```
 
 ---
@@ -670,24 +698,24 @@ Following example uses [Body section](#def-body-section) to provide an example o
 - **Inherits from**: [Named section](#def-named-section)
 
 #### Definition
-Defined by an [HTTP request method][httpmethods]:
+Defined by an [HTTP request method][httpmethods], optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
-    ## <HTTP request method>
+    ## <HTTP request method> (<prototype>)
 
 **-- or --**
 
 Defined by an action [name (identifier)](#def-identifier) followed by an
-[HTTP request method][httpmethods] enclosed in square brackets `[]`.
+[HTTP request method][httpmethods] enclosed in square brackets `[]`, optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses.
 
-    ## <identifier> [<HTTP request method>]
+    ## <identifier> [<HTTP request method>] (<prototype>)
 
 **-- or --**
 
 Defined by an action [name (identifier)](#def-identifier) followed by an
 [HTTP request method][httpmethods] and
-[URI template][uritemplate] enclosed in square brackets `[]`.
+[URI template][uritemplate] enclosed in square brackets `[]`, optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses.
 
-    ## <identifier> [<HTTP request method> <URI template>]
+    ## <identifier> [<HTTP request method> <URI template>] (<prototype>)
 
 #### Description
 Definition of at least one complete HTTP transaction as performed with the
@@ -713,8 +741,7 @@ group represents one transaction example. The first transaction example group
 starts with the first nested Request or Response section. Subsequent groups
 start with the first nested Request section following a Response section.
 
-Multiple Request and Response nested sections within one transaction example
-**should** have different identifiers.
+If [Resource Prototype](#def-resource-prototype) specified for [Action](#def-action-section) or parent [Resource](#def-resource-section) or parent [Resource Group](#def-resource-group) all responses from prototype are added to action's responses set.
 
 #### Example
 
@@ -791,6 +818,20 @@ Retrieves the list of **ACME Blog** posts.
 + response 200
 
         ...
+```
+
+#### Example with prototype
+
+```apib
+# Resource Prototypes
+
+## BasePrototype
++ Response 404
+
+# Resource [/resource]
+## Create Resource [POST] (BasePrototype)
+
++ Response 200
 ```
 
 > **NOTE:** The "Multiple Transaction Examples" example demonstrates three
@@ -1198,6 +1239,172 @@ Refer to the [MSON][] specification for full details on how to define an MSON Na
 ```
 
 ---
+
+
+<a name="def-resource-prototypes"></a>
+## Resource Prototypes section
+- **Parent sections:** none
+- **Nested sections:** [`0+` Resource Prototype section](#def-resource-prototype)
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by the `Resource Prototypes` keyword.
+
+    # Resource Prototypes
+
+#### Description
+This section holds arbitrary resource prototypes definitions defined in the form of
+Resource Prototype.
+
+Resource prototypes defined in this section **may** be used in any
+[Resource group section](#def-resourcegroup-section), [Resource section](#def-resource-section) or [Action section](#def-action-section).
+
+#### Example
+
+```apib
+# Resource Prototypes
+
+## RestrictedResource
+
++ Response 401
+```
+
+#### Example reusing Resource Prototype in Resource group
+
+```apib
+# Resource Prototypes
+
+## RestrictedResource
+
++ Response 401
+
+# Group Admin Resources (RestrictedResource)
+
+# List users [/admin/users]
+
++ Response 200
+    + Attributes (array, required)
+        + (object)
+            + id
+            + name
+            + email
+```
+
+#### Example reusing multiple Resource Prototypes in Resource group
+
+```apib
+# Resource Prototypes
+
+## RestrictedResource
+
++ Response 401
+
+## ResourceWithInternalError
+
++ Response 500
+
+# Group Admin Resources (RestrictedResource, ResourceWithInternalError)
+
+# List users [/admin/users]
+
++ Response 200
+    + Attributes (array, required)
+        + (object)
+            + id
+            + name
+            + email
+```
+
+#### Example reusing Resource Prototype in Resource
+
+```apib
+# Resource Prototypes
+
+## RestrictedResource
+
++ Response 401
+
+# Profile [/profile] (RestrictedResource)
+
+## Fetch profile [GET]
+
++ Response 200
+
+## Update profile [PUT]
+
++ Response 200
+
+```
+
+#### Example reusing Resource Prototype in Action
+
+```apib
+# Resource Prototypes
+
+## RestrictedResource
+
++ Response 401
+
+# Profile [/profile]
+
+## Fetch profile [GET] (RestrictedResource)
+
++ Response 200
+
+## Update profile [PUT]
+
++ Response 200
+
+```
+
+---
+
+
+<a name="def-resource-prototype"></a>
+## Resource Prototype section
+- **Parent sections:** [Resource Prototypes section](#def-resource-prototypes)
+- **Nested sections:** [`0+` Response section](#def-response-section)
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by unique prototype name - [identifier](#def-identifier) and optional arbitrary number of parent prototypes name enclosed in parentheses.
+
+```
+# <identifier> (<Identifier>)
+```
+
+#### Description
+This section defines prototype consisted of arbitrary number of [Response sections](#def-response-section). Any [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) or [Action](#def-action-section) **may** refers to Resource Prototype. If section refers to Resource Prototype it contains [Response sections](#def-response-section) from this Resource Prototype.
+
+#### Example
+
+```apib
+## RestrictedResource
+
++ Response 401
+```
+
+#### Example of Resource Prototype with parent Prototype
+
+```apib
+## RestrictedResource
+
++ Response 401
+
+## CancallableResource
+
++ Response 200 (application/json)
+    + Attributes
+        + status: `cancelled` (string, required, fixed)
+
+## AdminResource (RestrictedResource, CancellableResource)
+
++ Response 403
+```
+---
+
 
 <br>
 
