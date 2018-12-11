@@ -1187,7 +1187,7 @@ Defined by the `Data Structures` keyword.
     # Data Structures
 
 #### Description
-This section holds arbitrary data structures definitions defined in the form of
+This section contains arbitrary data structures definitions defined in the form of
 [MSON Named Types][].
 
 Data structures defined in this section **may** be used in any [Attributes section][].
@@ -1257,7 +1257,7 @@ Defined by the `Resource Prototypes` keyword.
     # Resource Prototypes
 
 #### Description
-This section holds arbitrary resource prototypes definitions defined in the form of
+This section contains arbitrary resource prototypes definitions defined in the form of
 Resource Prototype.
 
 Resource prototypes defined in this section **may** be used in any
