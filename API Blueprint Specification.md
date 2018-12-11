@@ -522,7 +522,7 @@ Defined by the `Group` keyword followed by group [name (identifier)](#def-identi
 This section represents a group of resources (Resource Sections). **May**
 include one or more nested [Resource Sections](#def-resource-section).
 
-If [Resource Prototype](#def-resource-prototype) specified it is applied for all nested [Actions](#def-action-section).
+[Resource Prototype](#def-resource-prototype) is applied for all nested [Actions](#def-action-section).
 
 #### Example
 
@@ -615,7 +615,7 @@ sections:
 > is considered good practice to group multiple HTTP methods under one resource
 > (resource set).
 
-If [Resource Prototype](#def-resource-prototype) specified it is applied for all nested [Actions](#def-action-section).
+[Resource Prototype](#def-resource-prototype) is applied for all nested [Actions](#def-action-section).
 
 #### Example
 
