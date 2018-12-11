@@ -1379,7 +1379,7 @@ Defined by unique prototype name - [identifier](#def-identifier) and optional ar
 ```
 
 #### Description
-This section defines prototype consisted of arbitrary number of [Response sections](#def-response-section). Any [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) or [Action](#def-action-section) **may** refers to Resource Prototype. If section refers to Resource Prototype it contains [Response sections](#def-response-section) from this Resource Prototype.
+This section defines prototype that consists of arbitrary number of [Response sections](#def-response-section). Any [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) or [Action](#def-action-section) **may** refers to Resource Prototype. If section refers to Resource Prototype it contains [Response sections](#def-response-section) from this Resource Prototype.
 
 #### Example
 
