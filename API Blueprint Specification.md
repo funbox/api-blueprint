@@ -1212,7 +1212,7 @@ Refer to the [MSON][] specification for full details on how to define an MSON Na
 + email: john@appleseed.com
 ```
 
-#### Example reusing Data Structure in Resource
+#### Example of reuse Data Structure in Resource
 
 ```apib
 # User [/user]
@@ -1227,7 +1227,7 @@ Refer to the [MSON][] specification for full details on how to define an MSON Na
 + email: john@appleseed.com
 ```
 
-#### Example reusing Resource-defined Data Structure
+#### Example of reuse Resource-defined Data Structure
 
 ```apib
 # User [/user]
@@ -1273,7 +1273,7 @@ Resource prototypes defined in this section **may** be used in any
 + Response 401
 ```
 
-#### Example reusing Resource Prototype in Resource group
+#### Example of reuse Resource Prototype in Resource group
 
 ```apib
 # Resource Prototypes
@@ -1294,7 +1294,7 @@ Resource prototypes defined in this section **may** be used in any
             + email
 ```
 
-#### Example reusing multiple Resource Prototypes in Resource group
+#### Example of reuse multiple Resource Prototypes in Resource group
 
 ```apib
 # Resource Prototypes
@@ -1319,7 +1319,7 @@ Resource prototypes defined in this section **may** be used in any
             + email
 ```
 
-#### Example reusing Resource Prototype in Resource
+#### Example of reuse Resource Prototype in Resource
 
 ```apib
 # Resource Prototypes
@@ -1340,7 +1340,7 @@ Resource prototypes defined in this section **may** be used in any
 
 ```
 
-#### Example reusing Resource Prototype in Action
+#### Example of reuse Resource Prototype in Action
 
 ```apib
 # Resource Prototypes
