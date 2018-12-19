@@ -522,8 +522,6 @@ Defined by the `Group` keyword followed by group [name (identifier)](#def-identi
 This section represents a group of resources (Resource Sections). **May**
 include one or more nested [Resource Sections](#def-resource-section).
 
-[Resource Prototype](#def-resource-prototype) is applied for all nested [Actions](#def-action-section).
-
 #### Example
 
 ```apib
@@ -614,8 +612,6 @@ sections:
 > resource (or resource set), as long as their HTTP methods differ. However it
 > is considered good practice to group multiple HTTP methods under one resource
 > (resource set).
-
-[Resource Prototype](#def-resource-prototype) is applied for all nested [Actions](#def-action-section).
 
 #### Example
 
@@ -743,8 +739,6 @@ Nested Request and Response sections **may** be ordered into groups where each
 group represents one transaction example. The first transaction example group
 starts with the first nested Request or Response section. Subsequent groups
 start with the first nested Request section following a Response section.
-
-If [Resource Prototype](#def-resource-prototype) specified for [Action](#def-action-section) or parent [Resource](#def-resource-section) or parent [Resource Group](#def-resource-group) all responses from prototype are added to action's responses set.
 
 #### Example
 
@@ -1273,6 +1267,55 @@ Resource prototypes defined in this section **may** be used in any
 + Response 401
 ```
 
+---
+
+
+<a name="def-resource-prototype"></a>
+## Resource Prototype section
+- **Parent sections:** [Resource Prototypes section](#def-resource-prototypes)
+- **Nested sections:** [`0+` Response section](#def-response-section)
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by unique prototype name - [identifier](#def-identifier) and optional arbitrary number of parent prototype names enclosed in parentheses.
+
+```
+# <identifier> (<Parent identifier>)
+```
+
+#### Description
+This section defines prototype that consists of arbitrary number of [Response sections](#def-response-section).
+One or more Resource Prototypes **may** be defined for [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) or [Action](#def-action-section)
+If Resource Prototype is defined for [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) it means that every nested [Action](#def-action-section) contains [Response sections](#def-response-section) from defined Resource Prototype.
+If Resource Prototype is defined for [Action](#def-action-section) it means that this section contains [Response sections](#def-response-section) from defined Resource Prototype.
+
+#### Example
+
+```apib
+## RestrictedResource
+
++ Response 401
+```
+
+#### Example of Resource Prototype with parent Prototype
+
+```apib
+## RestrictedResource
+
++ Response 401
+
+## CancallableResource
+
++ Response 200 (application/json)
+    + Attributes
+        + status: `cancelled` (string, required, fixed)
+
+## AdminResource (RestrictedResource, CancellableResource)
+
++ Response 403
+```
+
 #### Example of reuse Resource Prototype in Resource group
 
 ```apib
@@ -1292,6 +1335,22 @@ Resource prototypes defined in this section **may** be used in any
             + id
             + name
             + email
+```
+
+It's an equivalent of document
+
+```apib
+# Group Admin Resources
+
+# List users [/admin/users]
+
++ Response 200
+    + Attributes (array, required)
+        + (object)
+            + id
+            + name
+            + email
++ Response 401
 ```
 
 #### Example of reuse multiple Resource Prototypes in Resource group
@@ -1319,6 +1378,23 @@ Resource prototypes defined in this section **may** be used in any
             + email
 ```
 
+It's an equivalent of document
+
+```apib
+# Group Admin Resources
+
+# List users [/admin/users]
+
++ Response 200
+    + Attributes (array, required)
+        + (object)
+            + id
+            + name
+            + email
++ Response 401
++ Response 500
+```
+
 #### Example of reuse Resource Prototype in Resource
 
 ```apib
@@ -1340,6 +1416,22 @@ Resource prototypes defined in this section **may** be used in any
 
 ```
 
+It's an equivalent of document
+
+```apib
+# Profile [/profile]
+
+## Fetch profile [GET]
+
++ Response 200
++ Response 401
+
+## Update profile [PUT]
+
++ Response 200
++ Response 401
+```
+
 #### Example of reuse Resource Prototype in Action
 
 ```apib
@@ -1354,57 +1446,17 @@ Resource prototypes defined in this section **may** be used in any
 ## Fetch profile [GET] (RestrictedResource)
 
 + Response 200
+```
 
-## Update profile [PUT]
+It's an equivalent of document
+
+```apib
+# Profile [/profile]
+
+## Fetch profile [GET]
 
 + Response 200
-
-```
-
----
-
-
-<a name="def-resource-prototype"></a>
-## Resource Prototype section
-- **Parent sections:** [Resource Prototypes section](#def-resource-prototypes)
-- **Nested sections:** [`0+` Response section](#def-response-section)
-- **Markdown entity:** header
-- **Inherits from**: none
-
-#### Definition
-Defined by unique prototype name - [identifier](#def-identifier) and optional arbitrary number of parent prototypes name enclosed in parentheses.
-
-```
-# <identifier> (<Identifier>)
-```
-
-#### Description
-This section defines prototype that consists of arbitrary number of [Response sections](#def-response-section). Any [Resource group](#def-resourcegroup-section), [Resrouce](#def-resource-section) or [Action](#def-action-section) **may** refers to Resource Prototype. If section refers to Resource Prototype it contains [Response sections](#def-response-section) from this Resource Prototype.
-
-#### Example
-
-```apib
-## RestrictedResource
-
 + Response 401
-```
-
-#### Example of Resource Prototype with parent Prototype
-
-```apib
-## RestrictedResource
-
-+ Response 401
-
-## CancallableResource
-
-+ Response 200 (application/json)
-    + Attributes
-        + status: `cancelled` (string, required, fixed)
-
-## AdminResource (RestrictedResource, CancellableResource)
-
-+ Response 403
 ```
 
 ---
