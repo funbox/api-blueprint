@@ -1470,10 +1470,10 @@ It's an equivalent of document
 - **Inherits from**: none
 
 #### Definition
-Defined by the `Import` keyword followed by file name:
+Defined by the `Import` keyword followed by a relative path name (with reference to current directory containing the source code file) to the apib file:
 
 ```
-# Import <file>
+# Import <relative path name to the apib file>
 ```
 
 #### Description
@@ -1482,7 +1482,7 @@ Specifies an import of apib file into current document.
 #### Example
 
 ```apib
-# Import foo.apib
+# Import ./foo.apib
 ```
 
 <br>
