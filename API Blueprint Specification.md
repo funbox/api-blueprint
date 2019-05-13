@@ -106,17 +106,6 @@ All of the blueprint sections are optional. However, when present, a section
             + [`0-1` **Attributes** section](#def-attributes-section)
             + [`0-1` **Body** section](#def-body-section)
             + [`0-1` **Schema** section](#def-schema-section)
-    + [`1+` **WebSocket endpoint** sections](#def-ws-endpoint-section)
-        + [`0-1` **URI Parameters** section](#def-uriparameters-section)
-        + [`1+` **Channel** sections](#def-ws-channel-section)
-             + [`1+` **ServerToClient Message** sections](#def-ws-server-client-section)
-                + [`0-1` **Attributes** section](#def-attributes-section)
-                + [`0-1` **Body** section](#def-body-section)
-                + [`0-1` **Schema** section](#def-schema-section)
-             + [`1+` **ClientToServer Message** sections](#def-ws-client-server-section)
-                + [`0-1` **Attributes** section](#def-attributes-section)
-                + [`0-1` **Body** section](#def-body-section)
-                + [`0-1` **Schema** section](#def-schema-section)
 + [`0+` **Resource Group** sections](#def-resourcegroup-section)
     + [`0+` **Resource** sections](#def-resource-section) (see above)
 + [`0+` **Data Structures** section](#def-data-structures)
@@ -237,11 +226,8 @@ Following reserved keywords are used in section definitions:
 - `Group`
 - `Data Structures`
 - [HTTP methods][httpmethods] (e.g. `GET, POST, PUT, DELETE`...)
-- `Channel`
 - [URI templates][uritemplate] (e.g. `/resource/{id}`)
 - Combinations of an HTTP method and URI Template (e.g. `GET /resource/{id}`)
-- Combination of a WebSocket identifier (`WS`) and HTTP method `GET` (`WS GET`)
-- Combination of a WebSocket identifier (`WS`), HTTP method `GET` and URI Template (e.g. `WS GET /ws-endpoint`)
 
 #### List keywords
 - `Request`
@@ -253,8 +239,6 @@ Following reserved keywords are used in section definitions:
 - `Values`
 - `Attribute` & `Attributes`
 - `Import`
-- `ServerToClientMessage`
-- `ClientToServerMessage`
 
 > **NOTE: Avoid using these keywords in other Markdown headers or lists**
 
@@ -567,7 +551,7 @@ Resources in this groups are related to **ACME Blog** authors.
 <a name="def-resource-section"></a>
 ## Resource section
 - **Parent sections:** none, [Resource group section](#def-resourcegroup-section)
-- **Nested sections:** [`0-1` Parameters section](#def-uriparameters-section), [`0-1` Attributes section](#def-attributes-section), [`1+` Action section](#def-action-section), [`1+` WebSocket endpoint section](#def-ws-endpoint-section)
+- **Nested sections:** [`0-1` Parameters section](#def-uriparameters-section), [`0-1` Attributes section](#def-attributes-section), [`1+` Action section](#def-action-section)
 - **Markdown entity:** header
 - **Inherits from**: [Named section](#def-named-section)
 
@@ -582,16 +566,6 @@ Defined by a resource [name (identifier)](#def-identifier) followed by an
 [URI template][uritemplate] enclosed in square brackets `[]`, optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
     # <identifier> [<URI template>] (<prototype>)
-    
-**-- or --**
-
-Defined by the combination of WebSocket prefix `WS` and [HTTP method][httpmethods] `GET` followed by [URI template][uritemplate]:
-
-    # WS GET <URI template>
-    
-> **NOTE:** In this case the rest of this section represents the
-> [WebSocket endpoint section](#def-ws-endpoint-section) including its description and nested
-> sections and **follows the rules of the WebSocket endpoint section instead**.
 
 **-- or --**
 
@@ -617,7 +591,7 @@ its *URI* or a set of resources (a resource template) matching its *URI
 template*.
 
 This section **should** include at least one nested
-[Action section](#def-action-section) or one [WebSocket endpoint section](#def-ws-endpoint-section) and **may** include following nested
+[Action section](#def-action-section) and **may** include following nested
 sections:
 
 - [`0-1` URI parameters section](#def-uriparameters-section)
@@ -633,8 +607,6 @@ sections:
     be referenced in [Attributes sections][].
 
 - Additional [Action sections](#def-action-section)
-
-- Additional [WebSocket endpoint sections](#def-ws-endpoint-section)
 
 > **NOTE:** A blueprint document may contain multiple sections for the same
 > resource (or resource set), as long as their HTTP methods differ. However it
@@ -1195,166 +1167,6 @@ Specifies the HTTP message-body of a payload section.
 
 ---
 
-<a name="def-ws-endpoint-section"></a>
-
-## WebSocket endpoint section
-- **Parent sections:** [Resource section](#def-resource-section)
-- **Nested sections:** [`0-1` Parameters section](#def-uriparameters-section), [`1+` Channel section](#def-ws-channel-section)
-- **Markdown entity:** header
-- **Inherits from**: [Named section](#def-named-section)
-
-#### Definition
-Defined by the combination of WebSocket prefix `WS` and [HTTP method][httpmethods] `GET`.
-
-    ## WS GET
-
-**-- or --**
-
-Defined by a WebSocket endpoint [name (identifier)](#def-identifier) followed by the combination of WebSocket prefix `WS` and [HTTP method][httpmethods] `GET` enclosed in square brackets `[]`.
-
-    ## <identifier> [WS GET]
-
-**-- or --**
-
-Defined by a WebSocket endpoint [name (identifier)](#def-identifier) followed by the combination of WebSocket prefix `WS`, [HTTP method][httpmethods] `GET` and
-[URI template][uritemplate] enclosed in square brackets `[]`.
-
-    ## <identifier> [WS GET <URI template>]
-
-#### Description
-Definition of at least one WebSocket connection. 
-
-This section **should** include at least one nested
-[WebSocket channel section](#def-ws-channel-section) and **may** include following nested
-sections:
-
-- [`0-1` URI parameters section](#def-uriparameters-section)
-
-    URI parameters discussed in the scope of an WebSocket endpoint section apply to the respective WebSocket endpoint section ONLY and does not apply to any nested sections
-
-- Additional [WebSocket channel sections](#def-ws-channel-section)
-
-#### Example
-
-```apib
-# WS GET /endpoint
-
-## Channel /info:123
-
-+ ServerToClientMessage HelloClient
-  ...
-  
-# /posts
-
-## WebSocket Posts [WS GET]
-
-### Channel /ws-posts
-```
----
-
-<a name="def-ws-channel-section"></a>
-## WebSocket channel section
-- **Parent sections:** [WebSocket endpoint section](#def-ws-endpoint-section)
-- **Nested sections:** [`1+` ServerToClient Message section](#def-ws-server-client-section), [`1+` ClientToServer Message section](#def-ws-client-server-section)
-- **Markdown entity:** header
-- **Inherits from**: [Named section](#def-named-section)
-#### Definition
-Defined by the `Channel` keyword followed by channel [name (identifier)](#def-identifier):
-
-    # Channel <identifier>
-
-#### Description
-This section represents a WebSocket channel. One may subscribe to channel updates or publish a message to a channel.
-Channel section **should** inlcude at least one [ServerToClient Message section](#def-ws-server-client-section) or one [ClientToServer Message section](#def-ws-client-server-section)
-and **may** include additional [ServerToClient Message sections](#def-ws-server-client-section) or [ClientToServer Message sections](#def-ws-client-server-section).
-
-#### Example
-
-```apib
-## Channel /comments
-
-+ ServerToClientMessage HelloClient
-  + Attributes
-    + foo: `bar` (string, required)
-
-+ ServerToClientMessage GoodbyeClient
-  + Attributes
-    + foo: `bar` (string, required)
-    
-## Channel /info
-
-...
-```
-
----
-
-<a name="def-ws-server-client-section"></a>
-## ServerToClient Message section
-- **Parent sections:** [WebSocket channel section](#def-ws-channel-section)
-- **Nested sections:** [`0-1` Attributes section](#def-attributes-section), [`0-1` Body section](#def-body-section), [`0-1` Schema section](#def-schema-section)
-- **Markdown entity:** list
-- **Inherits from**: [Named section](#def-named-section)
-
-#### Definition
-Defined by the `ServerToClientMessage` keyword followed by an optional [name (identifier)](#def-identifier):
-
-    + ServerToClientMessage <identifier>
-
-#### Description
-One WebSocket server-to-client message example – payload.
-
-This section **should** include at least one of the following nested sections:
-
-- [`0-1` Attributes section](#def-attributes-section)
-- [`0-1` Body section](#def-body-section)
-- [`0-1` Schema section](#def-schema-section)
-
-If there is no nested section the content of the payload section is considered
-as content of the [Body section](#def-body-section).
-
-#### Example
-
-```apib
-+ ServerToClientMessage HelloClient
-
-        { "message" : "Hello World." }
-```
-
----
-
-<a name="def-ws-client-server-section"></a>
-## ClientToServer Message section
-- **Parent sections:** [WebSocket channel section](#def-ws-channel-section)
-- **Nested sections:** [`0-1` Attributes section](#def-attributes-section), [`0-1` Body section](#def-body-section)
-- **Markdown entity:** list
-- **Inherits from**: [Named section](#def-named-section)
-
-#### Definition
-Defined by the `ClientToServerMessage` keyword followed by an optional [name (identifier)](#def-identifier):
-
-    + ClientToServerMessage <identifier>
-
-#### Description
-One WebSocket client-to-server message example – payload.
-
-This section **should** include at least one of the following nested sections:
-
-- [`0-1` Attributes section](#def-attributes-section)
-- [`0-1` Body section](#def-body-section)
-- [`0-1` Schema section](#def-schema-section)
-
-If there is no nested section the content of the payload section is considered
-as content of the [Body section](#def-body-section).
-
-#### Example
-
-```apib
-+ ClientToServerMessage Exit
-
-        { "message" : "Goodbye cruel world." }
-```
-
----
 
 <a name="def-data-structures"></a>
 ## Data Structures section
