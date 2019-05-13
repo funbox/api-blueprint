@@ -108,6 +108,8 @@ All of the blueprint sections are optional. However, when present, a section
             + [`0-1` **Schema** section](#def-schema-section)
 + [`0+` **Resource Group** sections](#def-resourcegroup-section)
     + [`0+` **Resource** sections](#def-resource-section) (see above)
+    + [`0+` **SubGroup** sections](#def-subgroup-section)
+        + [`0+` **Message** sections](#def-message-section)
 + [`0+` **Data Structures** section](#def-data-structures)
 + [`0+` **Resource Prototypes** section](#def-resource-prototypes)
 + [`0+` **Resource Prototype** section](#def-resource-prototype)
@@ -224,6 +226,8 @@ Following reserved keywords are used in section definitions:
 
 #### Header keywords
 - `Group`
+- `SubGroup`
+- `Message`
 - `Data Structures`
 - [HTTP methods][httpmethods] (e.g. `GET, POST, PUT, DELETE`...)
 - [URI templates][uritemplate] (e.g. `/resource/{id}`)
@@ -507,20 +511,32 @@ Name and description of the API
 ---
 
 <a name="def-resourcegroup-section"></a>
-## Resource group section
+## Group section
 - **Parent sections:** none
-- **Nested sections:** [`0+` Resource section](#def-resource-section)
+- **Nested sections:** [`0+` Resource section](#def-resource-section), [`0+` SubGroup section](#def-subgroup-section), [`0+` Message section](#def-message-section)
 - **Markdown entity:** header
 - **Inherits from**: [Named section](#def-named-section)
 
 #### Definition
-Defined by the `Group` keyword followed by group [name (identifier)](#def-identifier), optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
+
+If the Group section consists of nested [SubGroup sections](#def-subgroup-section) or [Message sections](#def-message-section), it represents a **Message Group Section**. Otherwise, it represents a **Resource Group section**.
+
+As a Message group section, defined by the `Group` keyword followed by group [name (identifier)](#def-identifier):
+
+    # Group <identifier>
+
+**-- or --**
+
+As a Resource group section, defined by the `Group` keyword followed by group [name (identifier)](#def-identifier), optionally followed by arbitrary number of [resource prototype](#def-resource-prototype) [names (identifier)](#def-identifier) enclosed in parentheses:
 
     # Group <identifier> (<prototype>)
 
 #### Description
-This section represents a group of resources (Resource Sections). **May**
-include one or more nested [Resource Sections](#def-resource-section).
+This section represents a group of resources (Resource Sections) or a group of messages (Message Sections). **May** include:
+
+* one or more nested [Resource sections](#def-resource-section)
+* one or more nested [SubGroup sections](#def-subgroup-section)
+* one or more nested [Message sections](#def-message-section)
 
 #### Example
 
@@ -546,6 +562,53 @@ Resources in this groups are related to **ACME Blog** authors.
 ## Resource 1 [/resource1]
  ...
 ```
+
+```apib
+# Group /tv_series
+
+## SubGroup HBOSeries
+
+### Message NewEpisode
+
+ ...
+
+# Group /chat_messages
+
+## Message NewParticipant
+Notification about a new user being added to channel
+
++ Attributes (string, required) - username
+```
+
+---
+
+<a name="def-subgroup-section"></a>
+
+## Subgroup section
+- **Parent sections:** [Message group section](#def-resourcegroup-section)
+- **Nested sections:** [`0+` Message section](#def-message-section)
+- **Markdown entity:** header
+- **Inherits from**: [Named section](#def-named-section)
+
+#### Definition
+Defined by the `SubGroup` keyword followed by subgroup [name (identifier)](#def-identifier):
+
+    # SubGroup <identifier>
+
+#### Description
+This section represents an optional subgroup of messages. **May**
+include one or more nested [Message sections](#def-message-section).
+
+#### Example
+
+```apib
+# SubGroup chat:1234
+
+### Message ServerToClientMessage
++ Attributes
+    + message: `Hello Client!` (string)
+```
+
 ---
 
 <a name="def-resource-section"></a>
@@ -992,7 +1055,7 @@ Where:
 
 <a name="def-attributes-section"></a>
 ## Attributes Section
-- **Parent sections:** [Resource section](#def-resource-section) | [Action section](#def-action-section) | [Payload section](#def-payload-section)
+- **Parent sections:** [Resource section](#def-resource-section) | [Action section](#def-action-section) | [Payload section](#def-payload-section) | [Message section](#def-message-section)
 - **Nested sections:** See **[Markdown Syntax for Object Notation][MSON]**
 - **Markdown entity:** list
 - **Inherits from**: none
@@ -1021,7 +1084,7 @@ following:
 
 1. Resource data structure attributes ([Resource section](#def-resource-section))
 2. Action request attributes ([Action section](#def-action-section))
-3. Payload message-body attributes ([Payload section](#def-payload-section))
+3. Payload message-body attributes ([Payload section](#def-payload-section), [Message section](#def-message-section))
 
 Data structures defined in this section **may** refer to any arbitrary data
 structures defined in the [Data Structures section](#def-data-structures) as
@@ -1105,6 +1168,24 @@ provided. When a Schema section is provided, the attributes description
             { "message" : "Hello World." }
 ```
 
+#### Message Attributes description
+If defined, the [Body section](#def-body-section) **may** be omitted and the
+example representation **should** be generated from the attributes description.
+
+##### Example
+
+```apib
+### Message NewParticipant
+
++ Attributes(object)
+    + name (string)
+    + age (number)
+
++ Body
+
+    { "name" : "John", "age": 25 }
+```
+
 ---
 
 <a name="def-headers-section"></a>
@@ -1142,7 +1223,7 @@ One HTTP header per line.
 
 <a name="def-body-section"></a>
 ## Body section
-- **Parent sections:** [Payload section](#def-payload-section)
+- **Parent sections:** [Payload section](#def-payload-section) | [Message section](#def-message-section)
 - **Nested sections:** none
 - **Markdown entity:** list
 - **Inherits from**: [Asset section](#def-asset-section)
@@ -1153,7 +1234,7 @@ Defined by the `Body` keyword in Markdown list entity.
     + Body
 
 #### Description
-Specifies the HTTP message-body of a payload section.
+Specifies the message-body of a payload or message section.
 
 #### Example
 
@@ -1164,6 +1245,42 @@ Specifies the HTTP message-body of a payload section.
             "message": "Hello"
         }
 ```
+
+---
+
+<a name="def-message-section"></a>
+## Message section
+- **Parent sections:** [Message Group section](#def-resourcegroup-section), [SubGroup section](#def-subgroup-section)
+- **Nested sections:**
+    [`0-1` Attributes section](#def-attributes-section),
+    [`0-1` Body section](#def-body-section)
+- **Markdown entity:** header
+- **Inherits from**: [Named section](#def-named-section)
+
+Defined by the `Message` keyword followed by message [name (identifier)](#def-identifier):
+
+    # Message <identifier>
+
+#### Description
+Message section acts as a minimal generic entity, containing some payload (data structure) provided.
+
+This section **should** include at least one of the following nested sections:
+
+- [`0-1` Attributes section](#def-attributes-section)
+- [`0-1` Body section](#def-body-section)
+
+If there is no nested section the content of the message section is considered
+as content of the [Body section](#def-body-section).
+
+#### Relation of Body and Attributes sections
+
+Both of Body and Attributes sections describe a message's body.
+These descriptions **should** be consistent, not violating each other. When
+multiple body descriptions are provided they **should** be prioritized as
+follows:
+
+1. Body section
+2. Attributes section
 
 ---
 
