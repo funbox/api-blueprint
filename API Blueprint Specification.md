@@ -106,7 +106,7 @@ All of the blueprint sections are optional. However, when present, a section
             + [`0-1` **Attributes** section](#def-attributes-section)
             + [`0-1` **Body** section](#def-body-section)
             + [`0-1` **Schema** section](#def-schema-section)
-+ [`0+` **Resource Group** sections](#def-resourcegroup-section)
++ [`0+` **Group** sections](#def-resourcegroup-section)
     + [`0+` **Resource** sections](#def-resource-section) (see above)
     + [`0+` **SubGroup** sections](#def-subgroup-section)
         + [`0+` **Message** sections](#def-message-section)
@@ -532,11 +532,20 @@ As a Resource group section, defined by the `Group` keyword followed by group [n
     # Group <identifier> (<prototype>)
 
 #### Description
-This section represents a group of resources (Resource Sections) or a group of messages (Message Sections). **May** include:
+This section represents a group of resources (Resource Sections) or a group of messages (Message Sections).
+
+Group section **may** include:
 
 * one or more nested [Resource sections](#def-resource-section)
+
+**-- or --**
+
 * one or more nested [SubGroup sections](#def-subgroup-section)
 * one or more nested [Message sections](#def-message-section)
+
+If a **Group** section contains at least one [SubGroup section](#def-subgroup-section) or one [Message section](#def-message-section), it **MUST NOT** contain any [Resource sections](#def-resource-section).
+
+If a **Group** section contains at least one [Resource section](#def-resource-section), it **MUST NOT** contain any number of [SubGroup section](#def-subgroup-section) or [Message section](#def-message-section).
 
 #### Example
 
