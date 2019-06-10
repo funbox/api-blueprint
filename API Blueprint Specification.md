@@ -40,13 +40,14 @@ Version: 1A9-FB-1.0.0
 + [Attributes section](#def-attributes-section)
 + [Headers section](#def-headers-section)
 + [Body section](#def-body-section)
++ [Schema Named Type section](#def-schema-named-type-section)
 
 ### Going Further
 + [Data Structures section](#def-data-structures)
++ [Schema Structures section](#def-schema-structures)
 + [Resource Prototypes section](#def-resource-prototypes)
 + [Resource Prototype section](#def-resource-prototype)
 + [Import section](#def-import)
-
 
 ## [III. Appendix](#def-appendix)
 + [URI Templates](#def-uri-templates)
@@ -111,6 +112,8 @@ All of the blueprint sections are optional. However, when present, a section
     + [`0+` **SubGroup** sections](#def-subgroup-section)
         + [`0+` **Message** sections](#def-message-section)
 + [`0+` **Data Structures** section](#def-data-structures)
++ [`0+` **Schema Structures** section](#def-schema-structures)
+    + [`0+` **Schema Named Type** section](#def-schema-named-type-section)
 + [`0+` **Resource Prototypes** section](#def-resource-prototypes)
 + [`0+` **Resource Prototype** section](#def-resource-prototype)
 + [`0+` **Import section** section](#def-import)
@@ -229,6 +232,7 @@ Following reserved keywords are used in section definitions:
 - `SubGroup`
 - `Message`
 - `Data Structures`
+- `Schema Structures`
 - [HTTP methods][httpmethods] (e.g. `GET, POST, PUT, DELETE`...)
 - [URI templates][uritemplate] (e.g. `/resource/{id}`)
 - Combinations of an HTTP method and URI Template (e.g. `GET /resource/{id}`)
@@ -717,7 +721,7 @@ Resource representing **ACME Blog** posts.
 
 <a name="def-schema-section"></a>
 ## Schema section
-- **Parent sections:** [Payload section](#def-payload-section)
+- **Parent sections:** [Payload section](#def-payload-section) | [Schema Named Type section](#def-schema-named-type-section)
 - **Nested sections:** none
 - **Markdown entity:** list
 - **Inherits from**: [Asset section](#def-asset-section)
@@ -728,11 +732,11 @@ Defined by the `Schema` keyword in Markdown list entity.
     + Schema
 
 #### Description
-Specifies a validation schema for the HTTP message-body of parent payload section.
+Specifies a validation schema for the HTTP message-body of parent payload section or for the schema named type instance.
 
 #### Example
 
-Following example uses [Body section](#def-body-section) to provide an example of an `application/json` payload, and [Schema section](#def-schema-section) to provide a [JSON Schema](http://json-schema.org/) describing all possible valid shapes of the payload.
+Following example uses [Body section](#def-body-section) to provide an example of an `application/json` payload or for schema named type instance, and [Schema section](#def-schema-section) to provide a [JSON Schema](http://json-schema.org/) describing all possible valid shapes of the payload or of the schema named type.
 
 ```apib
 ## Retrieve a Message [GET]
@@ -753,6 +757,30 @@ Following example uses [Body section](#def-body-section) to provide an example o
                     }
                 }
             }
+```
+
+```apib
+# Schema Structures
+
+## Message Type
+
++ Body
+
+    {
+        "message": "Hello"
+    }
+
++ Schema
+
+    {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": "string"
+            }
+        }
+    }
 ```
 
 ---
@@ -1096,7 +1124,7 @@ following:
 3. Payload message-body attributes ([Payload section](#def-payload-section), [Message section](#def-message-section))
 
 Data structures defined in this section **may** refer to any arbitrary data
-structures defined in the [Data Structures section](#def-data-structures) as
+structures defined in the [Data Structures section](#def-data-structures) or [Schema Structures section](#def-schema-structures) as
 well as to any data structures defined by a named resource attributes
 description (see below).
 
@@ -1232,7 +1260,7 @@ One HTTP header per line.
 
 <a name="def-body-section"></a>
 ## Body section
-- **Parent sections:** [Payload section](#def-payload-section) | [Message section](#def-message-section)
+- **Parent sections:** [Payload section](#def-payload-section) | [Message section](#def-message-section) | [Schema Named Type section](#def-schema-named-type-section)
 - **Nested sections:** none
 - **Markdown entity:** list
 - **Inherits from**: [Asset section](#def-asset-section)
@@ -1243,7 +1271,7 @@ Defined by the `Body` keyword in Markdown list entity.
     + Body
 
 #### Description
-Specifies the message-body of a payload or message section.
+Specifies the message-body of a payload or message section or schema named type section.
 
 #### Example
 
@@ -1256,6 +1284,51 @@ Specifies the message-body of a payload or message section.
 ```
 
 ---
+
+<a name="def-schema-named-type-section"></a>
+## Schema Named Type section
+- **Parent sections:** [Schema Structures section](#def-schema-structures)
+- **Nested sections:** [`1` Body section](#def-body-section), [`1` Schema section](#def-schema-section)
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by a schema named type [name (identifier)](#def-identifier)
+
+    # <identifier>
+
+#### Description
+Schema Named Type defines named type as JSON Schema for describing all possible valid data shapes and specifies the data-body as an example.
+
+This section **should** include both [Schema section](#def-schema-section) and [Body section](#def-body-section) as required nested sections.
+
+#### Example
+
+```apib
+# Message Type
+
++ Body
+
+    {
+        "message": "Hello"
+    }
+
++ Schema
+
+    {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": "string"
+            }
+        }
+    }
+```
+
+
+---
+
 
 <a name="def-message-section"></a>
 ## Message section
@@ -1360,6 +1433,53 @@ Refer to the [MSON][] specification for full details on how to define an MSON Na
 
 ## Author (User)
 ```
+
+---
+
+
+<a name="def-schema-structures"></a>
+## Schema Structures section
+- **Parent sections:** none
+- **Nested sections:** [`1+` Schema Named Type section](#def-schema-named-type-section)
+- **Markdown entity:** header
+- **Inherits from**: none
+
+#### Definition
+Defined by the `Schema Structures` keyword.
+
+    # Schema Structures
+
+#### Description
+This section contains arbitrary data structures definitions defined in the form of [Schema Named Type section](#def-schema-named-type-section).
+
+Data structures defined in this section **may** be used in any [Attributes section][] and used as an array member or an object property or an element of [MSON One Of Type][] construction.
+
+#### Example
+
+```apib
+# Schema Structures
+
+## Message Type
+
++ Body
+
+    {
+        "message": "Hello"
+    }
+
++ Schema
+
+    {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": "string"
+            }
+        }
+    }
+```
+
 
 ---
 
@@ -1754,6 +1874,7 @@ With `varone := 42`, `vartwo = hello`, `varthree = 1024` the expansion is `/path
 [MSON]: https://github.com/apiaryio/mson
 [MSON Named Types]: https://github.com/apiaryio/mson/blob/master/MSON%20Specification.md#22-named-types
 [MSON Type Definition]: https://github.com/apiaryio/mson/blob/master/MSON%20Specification.md#35-type-definition
+[MSON One Of Type]: https://github.com/apiaryio/mson/blob/master/MSON%20Specification.md#52-one-of-type
 
 [`0-1` Attributes section]: #def-attributes-section
 [Attributes section]: #def-attributes-section
