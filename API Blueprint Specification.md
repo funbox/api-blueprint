@@ -446,8 +446,8 @@ This section **should** include at least one of the following nested sections:
 - [`0-1` Body section](#def-body-section)
 - [`0-1` Schema section](#def-schema-section)
 
-If there is no nested section the content of the payload section is considered
-as content of the [Body section](#def-body-section).
+If there is no nested section, the content of the payload section is considered
+as a section description.
 
 #### Relation of Body, Schema and Attributes sections
 Each of body, schema and attributes sections describe a message payload's body.
