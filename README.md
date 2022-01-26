@@ -117,3 +117,5 @@ If you would like to propose a change, please consult our
 ## License
 MIT License. See the [LICENSE](https://github.com/apiaryio/api-blueprint/blob/master/LICENSE)
 file.
+
+[![Sponsored by FunBox](https://funbox.ru/badges/sponsored_by_funbox_centered.svg)](https://funbox.ru)
