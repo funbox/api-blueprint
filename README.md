@@ -1,34 +1,14 @@
-![logo](assets/logo_apiblueprint.png)
-
 # API Blueprint
-### API Design for Humans
 
-[![slack](https://apiblueprint-slack.herokuapp.com/badge.svg)](https://apiblueprint-slack.herokuapp.com/)
+<img align="right" alt="API Blueprint logo" height="89" width="100" src="./assets/logo_apiblueprint.png"/>
+
+### API Design for Humans
 
 A powerful high-level API design language for web APIs.
 
 API Blueprint is simple and accessible to everybody involved in the API design
-lifecycle. Its syntax is concise yet expressive.
-
-With API Blueprint you can quickly prototype and model APIs to be created or
-describe already deployed mission-critical APIs. From a [car][tesla] to the
-largest Content Distribution Network (CDN) in the world.
-
-The API Blueprint is built to encourage dialogue and collaboration between
-project stakeholders, developers and customers at any point in the API
-lifecycle. At the same time, the API Blueprint [tools][] provide the support to
-achieve the goals be it API development, governance or delivery.
-
-![API Blueprint Lifecycle](assets/lifecycle.png)
-
-[tesla]: https://github.com/timdorr/model-s-api/blob/master/apiary.apib
-[tools]: http://apiblueprint.org/tools.html
-
-## Open Source
-API Blueprint is completely open sourced under the MIT license.
-Any [contribution][contribute] is highly appreciated.
-
-[contribute]: #contribute
+lifecycle.\
+Its syntax is concise yet expressive.
 
 ## At home on GitHub
 API Blueprint language is recognized by GitHub. You can
@@ -51,17 +31,11 @@ All it takes to describe an endpoint of your API is to write:
 
 in your favorite plain text editor.
 
-With this blueprint you can already get a [mock][], [documentation][] and
-[test][] for your API before you even start coding.
-
 To learn more about the API Blueprint syntax jump directly to the
 [API Blueprint Tutorial][tutorial] or take a look at some [examples][].
 
-[mock]: http://docs.apibstart.apiary.io/#reference/0/message/get?console=1
-[documentation]: http://docs.apibstart.apiary.io
-[test]: http://dredd.readthedocs.org/en/latest/
 [tutorial]: Tutorial.md
-[examples]: https://github.com/apiaryio/api-blueprint/tree/master/examples
+[examples]: https://github.com/funbox/api-blueprint/tree/master/examples
 
 ## Media Type
 The media type for API Blueprint is `text/vnd.apiblueprint`.
@@ -70,52 +44,39 @@ The media type for API Blueprint is `text/vnd.apiblueprint`.
 - [Tutorial][tutorial]
 - [Advanced Tutorial][advanced_tutorial]
 - [Examples][examples]
-- [Wiki][wiki]
 - [Glossary of Terms][glossary]
 - [Specification][specification]
-- [List of Tools][tools]
-- [Developers][developers]
 
 [advanced_tutorial]: Advanced%20Tutorial.md
 [glossary]: Glossary%20of%20Terms.md
 [specification]: API%20Blueprint%20Specification.md
-[wiki]: https://github.com/apiaryio/api-blueprint/wiki
-[developers]: https://apiblueprint.org/developers.html
 
-## Future
-The plans for API Blueprint are completely tracked on GitHub – see the
-[API Blueprint Roadmap][roadmap].
+## Disclaimer
 
-[roadmap]: https://github.com/apiaryio/api-blueprint/wiki/Roadmap
+This repository is a fork of the [API Blueprint specification](https://github.com/apiaryio/api-blueprint) by Apiary.
+It includes some changes compared to the original specification, adds new sections, and drops unused ones.
 
-## Developers
-Building tools for API Blueprint is possible thanks to its machine-friendly face
-provided by API Blueprint parser.
+### Reasons for creating a forked version
 
-If you are interested in building tools for API Blueprint check out the
-[Developing tools for API Blueprint][developers].
+In FunBox, we created our tools to work with API documentation. You can look at the [@funboxteam/crafter](https://github.com/funbox/crafter)
+and [@funboxteam/blueprinter-frontend](https://github.com/funbox/blueprinter-frontend) repositories to get a better understanding of what they are.
 
-## Contribute
-Feel free report problems or propose new ideas using the API Blueprint GitHub
-[issues][].
+These tools are mostly based on the original specification, but some newly implemented features also require changes in the specification.
+Unfortunately, our attempts to propose are stuck in conversations (see [request](https://github.com/apiaryio/api-blueprint-rfcs/pull/16)
+for adding Resource prototypes).
 
-We use an RFC process for proposing any substantial changes to the API
-Blueprint language, specification and/or parsers.
+In order to take the opportunity for independent developing of features we decided to make a fork and support it on our own.
 
-If you would like to propose a change, please consult our
-[RFC process][rfc].
+### Differences between the fork and the original specification
 
-[issues]: https://github.com/apiaryio/api-blueprint/issues
-[rfc]: https://github.com/apiaryio/api-blueprint-rfcs
-
-## Get in Touch
-- [@apiblueprint](https://twitter.com/apiblueprint)
-- [Slack](https://apiblueprint-slack.herokuapp.com/)
-- [Stack Overflow](http://stackoverflow.com/questions/tagged/apiblueprint)
-- [GitHub Issues][issues]
+* **Dropped support** of Resource model section and Relation section.
+* **Resource prototypes** section definition was added. This allows you to set up common responses in one place and reuse them through the documentation.
+* **Import** section definition was added. This allows to implement modular documentation and inject APIB files into each other.
+* Definitions of **Group, SubGroup and Message** sections were added. This allows to describe non-HTTP interaction in a documentation.
+* **Schema Structures** section definition was added. This allows to describe complex data structures directly in JSON Schema format.
+* A few other non-significant improvements.
 
 ## License
-MIT License. See the [LICENSE](https://github.com/apiaryio/api-blueprint/blob/master/LICENSE)
-file.
+MIT License. See the [LICENSE](https://github.com/funbox/api-blueprint/blob/master/LICENSE) file.
 
 [![Sponsored by FunBox](https://funbox.ru/badges/sponsored_by_funbox_centered.svg)](https://funbox.ru)
